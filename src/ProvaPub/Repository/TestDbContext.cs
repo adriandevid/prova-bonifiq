@@ -1,5 +1,7 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
+using CustomerModel = ProvaPub.Models.Customer;
+using ProductModel = ProvaPub.Models.Product;
 using ProvaPub.Models;
 using System.Collections.Generic;
 using System.Reflection.Emit;
@@ -9,6 +11,10 @@ namespace ProvaPub.Repository
 
 	public class TestDbContext : DbContext
 	{
+		public TestDbContext()
+		{
+
+		}
 		public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
 		{
 		}
@@ -17,16 +23,16 @@ namespace ProvaPub.Repository
 		{
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.Entity<Customer>().HasData(getCustomerSeed());
-			modelBuilder.Entity<Product>().HasData(getProductSeed());
+			modelBuilder.Entity<CustomerModel>().HasData(getCustomerSeed());
+			modelBuilder.Entity<ProvaPub.Models.Product>().HasData(getProductSeed());
 		}
 
-		private Customer[] getCustomerSeed()
+		private CustomerModel[] getCustomerSeed()
 		{
-			List<Customer> result = new();
+			List<CustomerModel> result = new();
 			for (int i = 0; i < 20; i++)
 			{
-				result.Add(new Customer()
+				result.Add(new CustomerModel()
 				{
 					 Id = i+1,
 					Name = new Faker().Person.FullName,
@@ -34,12 +40,12 @@ namespace ProvaPub.Repository
 			}
 			return result.ToArray();
 		}
-		private Product[] getProductSeed()
+		private ProductModel[] getProductSeed()
 		{
-			List<Product> result = new();
+			List<ProductModel> result = new();
 			for (int i = 0; i < 20; i++)
 			{
-				result.Add(new Product()
+				result.Add(new ProductModel()
 				{
 					Id = i + 1,
 					Name = new Faker().Commerce.ProductName()
@@ -48,8 +54,8 @@ namespace ProvaPub.Repository
 			return result.ToArray();
 		}
 
-		public DbSet<Customer> Customers{ get; set; }
-		public DbSet<Product> Products{ get; set; }
+		public DbSet<CustomerModel> Customers{ get; set; }
+		public DbSet<ProductModel> Products{ get; set; }
 		public DbSet<Order> Orders { get; set; }
 	}
 }

@@ -1,5 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using ProvaPub.Models.Interfaces.PayOrderFactoryMethod;
+using ProvaPub.Models.Interfaces.Repositories;
+using ProvaPub.Models.Interfaces.Services;
+using ProvaPub.Models.OrderFactoryMethod;
 using ProvaPub.Repository;
+using ProvaPub.Repository.Customer;
+using ProvaPub.Repository.Product;
 using ProvaPub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +18,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<RandomService>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ICreatorFactoryMethod, CreatePayOrderFactoryMethod>();
+
 builder.Services.AddDbContext<TestDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("ctx")));
 var app = builder.Build();
